@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import "./App.css";
-import { SearchPage } from "./SearchPage";
+import SearchPage from "./SearchPage";
 import { ComparePage } from "./ComparePage";
 import { Provider } from "./components/ui/provider";
 function App() {

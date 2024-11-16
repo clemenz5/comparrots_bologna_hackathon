@@ -27,23 +27,35 @@ const Header = () => {
         className="App-logo"
         alt="logo"
       />
-      <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
-      <nav style={{ justifyContent: "space-between", alignItems: "center", marginRight: "20px" }}>
-        <Button
-          onClick={() => {
-            navigate("/search");
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <nav
+          style={{
+            justifyContent: "space-between",
+            padding: "20px",
+            alignItems: "center",
+            marginRight: "20px",
           }}
         >
-          Search
-        </Button>
-        <Button
-          onClick={() => {
-            navigate("/compare");
-          }}
-        >
-          Comparison
-        </Button>
-      </nav>
+          <Button
+            style={{
+              marginRight: "20px",
+              marginLeft: "20px",
+              colorScheme: "green",
+            }}
+            onClick={() => {
+              navigate("/search");
+            }}
+          >
+            Search
+          </Button>
+        </nav>
       </div>
     </div>
   );
