@@ -3,13 +3,11 @@ import { NavBar } from "./components/NavBar";
 import "./App.css";
 import { SearchPage } from "./SearchPage";
 import { ComparePage } from "./ComparePage";
-import { ChakraProvider } from "@chakra-ui/react";
-import { Provider } from "@/components/ui/provider";
-
+import { Provider } from "./components/ui/provider";
 function App() {
   return (
     <div className="App">
-      <ChakraProvider>
+      <Provider>
         <BrowserRouter>
           <NavBar>
             <Routes>
@@ -18,7 +16,7 @@ function App() {
             </Routes>
           </NavBar>
         </BrowserRouter>
-      </ChakraProvider>
+      </Provider>
     </div>
   );
 }
