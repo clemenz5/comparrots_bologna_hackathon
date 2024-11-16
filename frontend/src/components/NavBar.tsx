@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/react";
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
+import { ColorModeButton } from "./ui/color-mode";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Header = () => {
         backgroundColor: "#282c34",
       }}
     >
+      <ColorModeButton/>
       <img
         style={{
           height: "50px",
