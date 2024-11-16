@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { ColorModeButton } from "./ui/color-mode";
+import PhotoAnalyzer from "./CameraButton";
 import theme from "../theme";
 
 const Header = () => {
