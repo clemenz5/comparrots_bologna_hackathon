@@ -2,13 +2,12 @@ import express, { Request, Response } from "express";
 var cors = require("cors");
 import { ChromaClient } from "chromadb";
 import path from "path";
-import {OllamaEmbeddingFunction} from "chromadb";
+import { OllamaEmbeddingFunction } from "chromadb";
 
 const embedder = new OllamaEmbeddingFunction({
-    url: "http://127.0.0.1:11434/api/embeddings",
-    model: "mxbai-embed-large:v1",
-})
-
+  url: "http://127.0.0.1:11434/api/embeddings",
+  model: "mxbai-embed-large:v1",
+});
 
 interface QueryResults {
   ids: string[]; // Array of IDs for the matching embeddings
@@ -23,7 +22,10 @@ const client = new ChromaClient({
   path: "http://localhost:8000", // Replace with your ChromaDB endpoint
 });
 
-const collection = client.getCollection({ name: "comparrit_collection", embeddingFunction: embedder });
+const collection = client.getCollection({
+  name: "comparrit_collection",
+  embeddingFunction: embedder,
+});
 
 app.use(cors());
 // Test endpoint
@@ -43,16 +45,21 @@ app.get("/query", (req: Request, res: Response) => {
         embeddingFunction: embedder,
       })
       .then((collection: any) => {
-        console.log(collection)
+        console.log(collection);
         collection
           .query({
             queryTexts: queryParam,
             nResults: 100,
           })
           .then((result: any) => {
-            console.log(res)
+            console.log(res);
             console.log({ documents: result.ids, accuracy: result.distances });
-            res.send(JSON.stringify({ documents: result.ids, accuracy: result.distances }))
+            res.send(
+              JSON.stringify({
+                documents: result.ids,
+                accuracy: result.distances,
+              })
+            );
           });
       });
   } else {
@@ -78,7 +85,6 @@ app.get("/getFile", (req: Request, res: Response) => {
 app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
   const paragraph = req.query.paragraph as string;
   if (paragraph) {
-
     const chroma = new ChromaClient({ path: "http://localhost:8000" });
     chroma
       .getOrCreateCollection({
@@ -87,27 +93,33 @@ app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
       })
       .then((collection: any) => {
         collection
-        .get({ ids: [ paragraph ], include: ["embeddings"] })
-        .catch((error: Error) => {
-          console.error(error)
-        })
-        .then((res: any) => {
-          collection
-            .query({
-              queryEmbeddings: res.embeddings,
-              nResults: 5,
-            })
-            .catch((error: Error) => {
-              console.error(error)
-            })
-            .then((result: any) => {
-              if (!result || !result.ids) {
-                console.log(new Error("ID not found (probably)"));
-              } else {
-                res.send(JSON.stringify({ documents: res.ids, accuracy: res.distances }));
-              }
-            });
-        });
+          .get({ ids: [paragraph], include: ["embeddings"] })
+          .catch((error: Error) => {
+            console.error(error);
+          })
+          .then((res: any) => {
+            collection
+              .query({
+                queryEmbeddings: res.embeddings,
+                nResults: 5,
+              })
+              .catch((error: Error) => {
+                console.error(error);
+              })
+              .then((result: any) => {
+                if (!result || !result.ids) {
+                  console.log(new Error("ID not found (probably)"));
+                } else {
+                  res.send(
+                    JSON.stringify({
+                      documents: res.ids,
+                      accuracy: res.distances,
+                    })
+                  );
+                }
+              });
+          });
+      });
   } else {
     res.status(400).send('Error: "paragraph" parameter is required.');
   }
