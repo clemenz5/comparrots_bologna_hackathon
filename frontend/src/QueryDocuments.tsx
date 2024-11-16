@@ -6,7 +6,6 @@ export const useDocumentSections = (documentId?: string) => {
 
   useEffect(() => {
     if (!documentId) return;
-
     const fetchDocumentSections = async () => {
       setIsLoading(true);
       try {
@@ -22,7 +21,6 @@ export const useDocumentSections = (documentId?: string) => {
         setIsLoading(false);
       }
     };
-
     fetchDocumentSections();
   }, [documentId]);
 

@@ -5,13 +5,13 @@ import { useDocumentSections } from "../QueryDocuments";
 
 export const ComparableSection = ({
   sectionText,
-  findRelatedCases,
+  onSectionClick,
 }: {
   sectionText: string;
-  findRelatedCases: (text: string) => void;
+  onSectionClick: (relatedSection: string) => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const handleClick = () => findRelatedCases(sectionText);
+  const handleClick = () => onSectionClick(sectionText);
   return (
     <Stack
       px={4}
@@ -47,9 +47,17 @@ export default function MainDocumentCard(props: {
   documentId?: string;
   style?: React.CSSProperties;
   accuracy?: number;
-  onSectionClick: () => void;
+  onSectionClick: (relatedSection: string) => void;
 }) {
-  const { sections, isLoading } = useDocumentSections(props.documentId);
+  const [sections, setIsLoading] = useState<string[]>([]);
+  const { sections: documentSections, isLoading } = useDocumentSections(
+    props.documentId
+  );
+
+  useEffect(() => {
+    setIsLoading(documentSections);
+  }, [documentSections]);
+
   return (
     <Card.Root
       width={"390px"}
@@ -57,19 +65,17 @@ export default function MainDocumentCard(props: {
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
       <Card.Header>
-        <Card.Title>Selected Document: {props.documentId}</Card.Title>
+        <Card.Title>Selected document: {props.documentId}</Card.Title>
       </Card.Header>
       <Card.Body>
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          sections.map((section, index) => (
+          documentSections.map((section, index) => (
             <ComparableSection
               key={index}
               sectionText={section}
-              findRelatedCases={function (text: string): void {
-                throw new Error("Function not implemented.");
-              }}
+              onSectionClick={props.onSectionClick}
             />
           ))
         )}

@@ -13,7 +13,7 @@ export default function RelatedDocumentCard(props: {
   const navigateToComparePage = () => {
     navigate(`/compare?documentId=${props.documentId}`);
   };
-  
+
   const { sections, isLoading } = useDocumentSections(props.documentId);
 
   return (
@@ -29,7 +29,7 @@ export default function RelatedDocumentCard(props: {
       <Card.Body>{isLoading ? <div>Loading...</div> : sections[0]}</Card.Body>
       <Card.Footer style={{ justifyContent: "center" }}>
         <Button
-          colorPalette="blue"
+          colorPalette="green"
           onClick={navigateToComparePage}
           disabled={!props.documentId} // Disable button if no documentId is provided
         >

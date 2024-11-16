@@ -1,9 +1,7 @@
 import { ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
 import { ColorModeButton } from "./ui/color-mode";
 
 const Header = () => {
-  
   return (
     <div
       style={{

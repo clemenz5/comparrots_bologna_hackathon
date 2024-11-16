@@ -11,19 +11,25 @@ export const ComparePage = () => {
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const documentId = urlParams.get("documentId");
-  const relatedDocuments = urlParams.getAll("relatedDocuments");
-  const numberOfRelatedDocuments = relatedDocuments.length;
   const navigate = useNavigate();
   const [relatedDocumentsToShow, setRelatedDocumentsToShow] = useState<
     string[] | undefined
   >();
-  const [sectionClicked, setSectionClicked] = useState(false);
+  const [sectionClicked, setSectionClicked] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (sectionClicked) {
-      setRelatedDocumentsToShow(relatedDocuments);
+      (async () => {
+        const response = await fetch(
+          `https://lh9lxctqeb3213-644110db-8080.proxy.runpod.net/api/getSimilarParagraphs?paragraph=${sectionClicked}`
+        );
+        const data = await response.json();
+        setRelatedDocumentsToShow(data.relatedDocuments);
+      })();
     }
-  }, [sectionClicked, relatedDocuments]);
+  }, [sectionClicked]);
 
   return (
     <Stack>
@@ -53,7 +59,7 @@ export const ComparePage = () => {
       >
         <MainDocumentCard
           documentId={documentId ?? ""}
-          onSectionClick={() => setSectionClicked(true)}
+          onSectionClick={(section) => setSectionClicked(section)}
         ></MainDocumentCard>
         {relatedDocumentsToShow && (
           <Grid gap="30px">
@@ -67,7 +73,7 @@ export const ComparePage = () => {
                   documentId={relatedDocument}
                   style={{
                     padding: `0 ${
-                      numberOfRelatedDocuments > 1
+                      relatedDocumentsToShow.length > 1
                         ? index === 0
                           ? "30px"
                           : "15px"

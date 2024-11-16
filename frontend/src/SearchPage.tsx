@@ -10,17 +10,16 @@ function Searchbar(props: {
   setQuery: (query: string) => void;
 }) {
   const [debouncedQuery, setDebouncedQuery] = useState(props.query);
-  // UseEffect to implement the debouncing
+
   useEffect(() => {
     const handler = setTimeout(() => {
-      props.setQuery(debouncedQuery); // Update the parent's query state after 5 seconds
-    }, 1000); // 5 seconds debounce delay
+      props.setQuery(debouncedQuery);
+    }, 1000);
 
-    // Cleanup function: clears timeout if the component unmounts or the input changes before 5 seconds
     return () => {
       clearTimeout(handler);
     };
-  }, [debouncedQuery]); // Only trigger when `debouncedQuery` changes
+  }, [debouncedQuery]);
 
   return (
     <div style={{ ...props.style }}>
@@ -42,11 +41,11 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  console.log(documents);
   useEffect(() => {
-    if (!props.query) {
+    if (!props.query || props.query.trim() === "") {
       setDocuments([]);
       setAccuracies([]);
+      setError(null); // Clear the error when no query is made
       return;
     }
 
@@ -65,11 +64,11 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         return response.json();
       })
       .then((data) => {
-        console.log("sddf", data);
         setDocuments(data.documents[0] || []);
         setAccuracies(data.accuracy[0] || []);
       })
       .catch((err) => {
+        console.log(err.message);
         setError(err.message);
       })
       .finally(() => {
@@ -86,16 +85,17 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         height: "100%",
         backgroundColor: "grey.[100]",
         borderRadius: "10px",
-        padding: "10px",
+        padding: "24px",
         overflowY: "scroll",
         scrollbarWidth: "thin",
         justifyItems: "center",
+        justifyContent: "center",
+        gap: 4,
       }}
       templateColumns={{
         base: "repeat(auto-fit, minmax(280px, 1fr))",
         md: "repeat(auto-fit, minmax(380px, 1fr))",
       }}
-      gap={4}
       width="100%"
     >
       {documents.length > 0 ? (
@@ -103,11 +103,11 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
           <RelatedDocumentCard
             key={doc}
             documentId={doc}
-            accuracy={accuracies[index]} // Pass accuracy as a prop
+            accuracy={accuracies[index]}
           />
         ))
       ) : (
-        <div>No results found.</div>
+        <div></div>
       )}
     </Grid>
   );
@@ -118,9 +118,9 @@ export default function SearchPage() {
   return (
     <VStack
       style={{
-        padding: "50px",
+        padding: "20px",
         width: "100%",
-        margin: "auto",
+        margin: "20px",
         alignItems: "center",
         justifyContent: "center",
       }}
