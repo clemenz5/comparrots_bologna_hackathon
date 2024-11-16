@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NavBar } from "./components/NavBar";
+import "./App.css";
+import { SearchPage } from "./SearchPage";
+import { ComparePage } from "./ComparePage";
+import { ChakraProvider } from "@chakra-ui/react";
+import { Provider } from "@/components/ui/provider";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ChakraProvider>
+        <BrowserRouter>
+          <NavBar>
+            <Routes>
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/compare" element={<ComparePage />} />
+            </Routes>
+          </NavBar>
+        </BrowserRouter>
+      </ChakraProvider>
     </div>
   );
 }
