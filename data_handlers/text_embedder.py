@@ -1,6 +1,7 @@
 import ollama
 import chromadb
-from text_handlers import read_json
+from tqdm import tqdm
+from text_handlers import read_json, get_json_files
 
 chroma_client = chromadb.Client()
 #chroma_client = chromadb.HttpClient(host='localhost', port=8000)
@@ -9,7 +10,7 @@ collection = chroma_client.get_or_create_collection(name="comparrit_collection",
 #model = SentenceTransformer("mixedbread-ai/mxbai-embed-large-v1")
 
 def add_docs_to_chromadb(doc_tuple_list):
-	for id, sections in doc_tuple_list:
+	for id, sections in tqdm(doc_tuple_list):
 		embeddings = []
 		ids = []
 		id_counter = 0
@@ -46,20 +47,9 @@ def test_paragraph_distances(query) -> None:
 	print("==TEST PARAGRAPH SIMILARITY==")
 	print([f"{id}: {res}" for id, res in zip(closest["ids"][0], closest["distances"][0])])
 
-doc_list = ["001-71938.json",
-			"001-71940.json",
-			"001-71946.json",
-			"001-71983.json",
-			"001-71988.json",
-			"001-72031.json",
-			"001-72037.json",
-			"001-72039.json",
-			"001-72043.json",
-			"001-72046.json"]
+
 
 if __name__ == '__main__':
+	doc_list = get_json_files("data")
 	doc_tuples = [read_json(doc) for doc in doc_list]
-	add_docs_to_chromadb(doc_tuples[1:])
-	first_doc_sections = doc_tuples[0][1]
-	test_paragraph_distances(first_doc_sections[0])
-	get_most_similar_section(first_doc_sections[4])
+	add_docs_to_chromadb(doc_tuples)
