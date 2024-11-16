@@ -47,7 +47,7 @@ app.get("/query", (req: Request, res: Response) => {
         collection
           .query({
             queryTexts: queryParam,
-            nResults: 10,
+            nResults: 100,
           })
           .then((result: any) => {
             console.log(res)
@@ -75,26 +75,43 @@ app.get("/getFile", (req: Request, res: Response) => {
   }
 });
 
-// app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
-//   const paragraph = req.query.paragraph as string;
-//   if (paragraph) {
-//     try {
-//       const result = await collection.query({
-//         queryEmbeddings: embedder.embed(paragraph),
-//         nResults: 5,
-//       });
-//       const similarParagraphs = result.ids.map((id, index) => ({
-//         id,
-//         similarity: result.distances[index],
-//       }));
-//       res.json(similarParagraphs);
-//     } catch (error) {
-//       res.status(500).send("Error: Unable to retrieve similar paragraphs.");
-//     }
-//   } else {
-//     res.status(400).send('Error: "paragraph" parameter is required.');
-//   }
-// });
+app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
+  const paragraph = req.query.paragraph as string;
+  if (paragraph) {
+
+    const chroma = new ChromaClient({ path: "http://localhost:8000" });
+    chroma
+      .getOrCreateCollection({
+        name: "comparrit_collection",
+        embeddingFunction: embedder,
+      })
+      .then((collection: any) => {
+        collection
+        .get({ ids: [ paragraph ], include: ["embeddings"] })
+        .catch((error: Error) => {
+          console.error(error)
+        })
+        .then((res: any) => {
+          collection
+            .query({
+              queryEmbeddings: res.embeddings,
+              nResults: 5,
+            })
+            .catch((error: Error) => {
+              console.error(error)
+            })
+            .then((result: any) => {
+              if (!result || !result.ids) {
+                console.log(new Error("ID not found (probably)"));
+              } else {
+                res.send(JSON.stringify({ documents: res.ids, accuracy: res.distances }));
+              }
+            });
+        });
+  } else {
+    res.status(400).send('Error: "paragraph" parameter is required.');
+  }
+});
 
 // Start the server
 app.listen(PORT, () => {
