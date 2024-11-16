@@ -3,6 +3,7 @@ import { InputGroup } from "./components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
 import { CSSProperties, useEffect, useState } from "react";
 import RelatedDocumentCard from "./components/RelatedDocumentCard";
+import PhotoAnalyzer from "./components/CameraButton";
 
 function Searchbar(props: {
   style?: CSSProperties;
@@ -10,26 +11,28 @@ function Searchbar(props: {
   setQuery: (query: string) => void;
 }) {
   const [debouncedQuery, setDebouncedQuery] = useState(props.query);
-  // UseEffect to implement the debouncing
+
   useEffect(() => {
     const handler = setTimeout(() => {
-      props.setQuery(debouncedQuery); // Update the parent's query state after 5 seconds
-    }, 1000); // 5 seconds debounce delay
+      props.setQuery(debouncedQuery);
+    }, 1000);
 
-    // Cleanup function: clears timeout if the component unmounts or the input changes before 5 seconds
     return () => {
       clearTimeout(handler);
     };
-  }, [debouncedQuery]); // Only trigger when `debouncedQuery` changes
+  }, [debouncedQuery]);
 
   return (
-    <div style={{ ...props.style }}>
+    <div style={{ ...props.style, display: "flex", alignItems: "center",  }}>
       <InputGroup style={{ width: "100%" }} startElement={<LuSearch />}>
         <Input
           onChange={(e) => setDebouncedQuery(e.target.value)}
           placeholder="Search for documents"
+          size={"lg"}
+          width={"100%"}
         />
-      </InputGroup>
+        
+      </InputGroup><PhotoAnalyzer onResult={(result) => props.setQuery(result) }/>
     </div>
   );
 }
@@ -41,9 +44,10 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!props.query) {
+    if (!props.query || props.query.trim() === "") {
       setDocuments([]);
       setAccuracies([]);
+      setError(null); // Clear the error when no query is made
       return;
     }
 
@@ -62,10 +66,11 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         return response.json();
       })
       .then((data) => {
-        setDocuments(data.documents || []);
-        setAccuracies(data.accuracies || []);
+        setDocuments(data.documents[0] || []);
+        setAccuracies(data.accuracy[0] || []);
       })
       .catch((err) => {
+        console.log(err.message);
         setError(err.message);
       })
       .finally(() => {
@@ -82,24 +87,29 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         height: "100%",
         backgroundColor: "grey.[100]",
         borderRadius: "10px",
-        padding: "10px",
+        padding: "24px",
         overflowY: "scroll",
         scrollbarWidth: "thin",
         justifyItems: "center",
+        justifyContent: "center",
+        gap: 4,
       }}
-      templateColumns={"repeat(auto-fit, minmax(380px, 1fr))"}
-      gap={4}
+      templateColumns={{
+        base: "repeat(auto-fit, minmax(280px, 1fr))",
+        md: "repeat(auto-fit, minmax(380px, 1fr))",
+      }}
+      width="100%"
     >
       {documents.length > 0 ? (
         documents.map((doc, index) => (
           <RelatedDocumentCard
             key={doc}
             documentId={doc}
-            accuracy={accuracies[index]} // Pass accuracy as a prop
+            accuracy={accuracies[index]}
           />
         ))
       ) : (
-        <div>No results found.</div>
+        <div></div>
       )}
     </Grid>
   );
@@ -110,15 +120,14 @@ export default function SearchPage() {
   return (
     <VStack
       style={{
-        marginTop: "100px",
-        height: "100%",
-        width: "40%",
+        padding: "20px",
+        width: "100%",
+        margin: "20px",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
       <Searchbar query={query} setQuery={setQuery} />
-
       <SearchResults query={query} />
     </VStack>
   );

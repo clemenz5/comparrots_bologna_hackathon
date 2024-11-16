@@ -1,6 +1,8 @@
-import { Button, Card } from "@chakra-ui/react";
+import { Button } from "./ui/button";
+import { Card } from "@chakra-ui/react";
 import { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDocumentSections } from "../QueryDocuments";
 
 export default function RelatedDocumentCard(props: {
   documentId?: string;
@@ -12,6 +14,8 @@ export default function RelatedDocumentCard(props: {
     navigate(`/compare?documentId=${props.documentId}`);
   };
 
+  const { sections, isLoading } = useDocumentSections(props.documentId);
+
   return (
     <Card.Root
       width={"390px"}
@@ -22,10 +26,10 @@ export default function RelatedDocumentCard(props: {
         <Card.Title>Selected Document: {props.documentId}</Card.Title>
         <Card.Description></Card.Description>
       </Card.Header>
-      <Card.Body></Card.Body>
-      <Card.Footer>
+      <Card.Body>{isLoading ? <div>Loading...</div> : sections[0]}</Card.Body>
+      <Card.Footer style={{ justifyContent: "center" }}>
         <Button
-          colorScheme="blue"
+          colorPalette="green"
           onClick={navigateToComparePage}
           disabled={!props.documentId} // Disable button if no documentId is provided
         >

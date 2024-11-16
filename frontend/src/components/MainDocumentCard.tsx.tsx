@@ -1,14 +1,17 @@
 import { Button, Card, Stack } from "@chakra-ui/react";
 import { CSSProperties, useState, useEffect } from "react";
 import { Highlight } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useDocumentSections } from "../QueryDocuments";
 
 export const ComparableSection = ({
-  documentText,
+  sectionText,
+  onSectionClick,
 }: {
-  documentText: string;
+  sectionText: string;
+  onSectionClick: (relatedSection: string) => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const handleClick = () => onSectionClick(sectionText);
   return (
     <Stack
       px={4}
@@ -16,10 +19,12 @@ export const ComparableSection = ({
       borderRadius={4}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
+      cursor="pointer"
     >
       {isHovered ? (
         <Highlight
-          query={documentText}
+          query={sectionText}
           styles={{
             px: 1,
             py: 0.5,
@@ -29,10 +34,10 @@ export const ComparableSection = ({
             color: "green.800",
           }}
         >
-          {documentText}
+          {sectionText}
         </Highlight>
       ) : (
-        documentText
+        sectionText
       )}
     </Stack>
   );
@@ -40,29 +45,18 @@ export const ComparableSection = ({
 
 export default function MainDocumentCard(props: {
   documentId?: string;
-  style?: CSSProperties;
+  style?: React.CSSProperties;
   accuracy?: number;
+  onSectionClick: (relatedSection: string) => void;
 }) {
-  const [sections, setSections] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [sections, setIsLoading] = useState<string[]>([]);
+  const { sections: documentSections, isLoading } = useDocumentSections(
+    props.documentId
+  );
 
   useEffect(() => {
-    async function fetchDocumentSections() {
-      // Replace this with actual API or logic to fetch document sections
-      if (props.documentId) {
-        const response = await fetch(
-          `/api/documents/${props.documentId}/sections`
-        );
-        const data = await response.json();
-        if (data.sections) {
-          setSections(data.sections);
-        } else {
-          setSections(["No sections found."]);
-        }
-      }
-    }
-    fetchDocumentSections();
-  }, [props.documentId]);
+    setIsLoading(documentSections);
+  }, [documentSections]);
 
   return (
     <Card.Root
@@ -71,20 +65,21 @@ export default function MainDocumentCard(props: {
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
       <Card.Header>
-        <Card.Title>Selected Document: {props.documentId}</Card.Title>
-        <Card.Description></Card.Description>
+        <Card.Title>Selected document: {props.documentId}</Card.Title>
       </Card.Header>
       <Card.Body>
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          sections.map((section, index) => (
-            <ComparableSection key={index} documentText={section} />
+          documentSections.map((section, index) => (
+            <ComparableSection
+              key={index}
+              sectionText={section}
+              onSectionClick={props.onSectionClick}
+            />
           ))
         )}
       </Card.Body>
-      <Card.Footer>
-      </Card.Footer>
     </Card.Root>
   );
 }

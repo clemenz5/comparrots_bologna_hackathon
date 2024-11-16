@@ -1,10 +1,9 @@
-import { Button } from "@chakra-ui/react";
 import { ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
 import { ColorModeButton } from "./ui/color-mode";
+import PhotoAnalyzer from "./CameraButton";
+import theme from "../theme";
 
 const Header = () => {
-  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -12,12 +11,12 @@ const Header = () => {
         padding: "20px",
         flexDirection: "row",
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "left",
         alignItems: "center",
-        backgroundColor: "#282c34",
+        backgroundColor: "backgroundColor.700",
+        borderBottom: "1px solid #333",
       }}
     >
-      <ColorModeButton/>
       <img
         style={{
           height: "50px",
@@ -29,36 +28,7 @@ const Header = () => {
         className="App-logo"
         alt="logo"
       />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <nav
-          style={{
-            justifyContent: "space-between",
-            padding: "20px",
-            alignItems: "center",
-            marginRight: "20px",
-          }}
-        >
-          <Button
-            style={{
-              marginRight: "20px",
-              marginLeft: "20px",
-              colorScheme: "green",
-            }}
-            onClick={() => {
-              navigate("/search");
-            }}
-          >
-            Search
-          </Button>
-        </nav>
-      </div>
+      <ColorModeButton style={{ marginLeft: "20px" }} />
     </div>
   );
 };

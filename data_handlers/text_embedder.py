@@ -1,7 +1,7 @@
 import ollama
 import chromadb
 from tqdm import tqdm
-from text_handlers import read_json, get_json_files
+from text_handlers import read_json, get_json_files, get_name
 
 chroma_client = chromadb.Client()
 chroma_client = chromadb.HttpClient(host='localhost', port=8000)
