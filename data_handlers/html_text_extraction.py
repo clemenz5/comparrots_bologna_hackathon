@@ -1,5 +1,23 @@
 from bs4 import BeautifulSoup
 import re
+import json
+import os
+
+def get_html_filenames(folder="."):
+    """
+    Get all filenames of HTML files in the current directory.
+    
+    Returns:
+        list: A list of HTML filenames in the current directory.
+    """
+    # Get all files in the current directory
+    files = os.listdir(folder)
+    
+    # Filter for .html files
+    html_files = [file for file in files if file.endswith('.html')]
+    
+    return html_files
+
 
 def split_into_paragraphs(text, min_sentences=3, max_sentences=10):
     """
@@ -62,20 +80,40 @@ def html_to_plain_text(html_content):
     # Return the cleaned-up plain text
     return plain_text.strip()
 
+def save_to_json(filename, paragraphs, folder="."):
+    """
+    Save the output in JSON format.
+    
+    Args:
+        filename (str): The filename to use as the ID.
+        paragraphs (list): The list of paragraphs to save.
+        
+    Returns:
+        None
+    """
+    # Create a dictionary with the desired structure
+    data = {
+        "id": filename,
+        "sections": paragraphs
+    }
+    
+    # Save the data to a JSON file
+    with open(f"{folder}/{filename}.json", 'w', encoding='utf-8') as json_file:
+        json.dump(data, json_file, ensure_ascii=False, indent=4)
+
 # Example Usage
 if __name__ == "__main__":
     # Read an HTML file (replace 'example.html' with your file)
-    with open('/home/kron/projects/hackathon_bologna_2024/data/dataset_hudoc_eng_html_article_6/001-71938.html', 'r', encoding='utf-8') as file:
-        html_content = file.read()
-    
-    # Convert to plain text
-    plain_text = html_to_plain_text(html_content)
-    
-    # Print the result or save to a file
-    for element in split_into_paragraphs(plain_text):
-        print(element)
-        print("------------------------")
-    
-    # Optionally, save the plain text to a file
-    with open('output.txt', 'w', encoding='utf-8') as output_file:
-        output_file.write(plain_text)
+    html_files = get_html_filenames(folder="../data/dataset_hudoc_eng_html_article_6")
+    for html_file in html_files:
+        with open(f'{html_file}', 'r', encoding='utf-8') as file:
+            html_content = file.read()
+        
+        # Convert to plain text
+        plain_text = html_to_plain_text(html_content)
+        
+        # Print the result or save to a file
+        sections =  split_into_paragraphs(plain_text)
+        
+        # Save the output in JSON format
+        save_to_json(f'{html_file.split(".")[0]}', sections)
