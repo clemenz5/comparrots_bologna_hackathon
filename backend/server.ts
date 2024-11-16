@@ -112,8 +112,8 @@ app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
                 } else {
                   res.send(
                     JSON.stringify({
-                      documents: res.ids,
-                      accuracy: res.distances,
+                      documents: result.ids,
+                      accuracy: result.distances,
                     })
                   );
                 }
