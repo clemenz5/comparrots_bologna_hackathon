@@ -49,9 +49,10 @@ app.get("/query", (req: Request, res: Response) => {
             queryTexts: queryParam,
             nResults: 10,
           })
-          .then((res: any) => {
+          .then((result: any) => {
             console.log(res)
-            console.log({ ids: res.ids, distances: res.distances });
+            console.log({ documents: result.ids, accuracy: result.distances });
+            res.send(JSON.stringify({ documents: result.ids, accuracy: result.distances }))
           });
       });
   } else {
