@@ -12,7 +12,7 @@ def normalize(text: str) -> str:
 
 def read_json(json_file) -> tuple:
 	"""Extracts a html text"""
-	file_path = os.path.join(os.getcwd(), 'data', json_file)
+	file_path = os.path.join(os.getcwd(), '/workspace/DFJ/hackathon_hudoc_article_6_data/dataset_hudoc_eng_json_article_6', json_file)
 	with open(file_path, 'r', encoding='utf-8') as json_doc:
 		json_obj = json.load(json_doc)        
 	doc_id = json_obj['id']

@@ -104,9 +104,11 @@ def save_to_json(filename, paragraphs, folder="."):
 # Example Usage
 if __name__ == "__main__":
     # Read an HTML file (replace 'example.html' with your file)
-    html_files = get_html_filenames(folder="../data/dataset_hudoc_eng_html_article_6")
+    folder="/workspace/DFJ/hackathon_hudoc_article_6_data/dataset_hudoc_eng_html_article_6"
+    html_files = get_html_filenames(folder=folder)
     for html_file in html_files:
-        with open(f'{html_file}', 'r', encoding='utf-8') as file:
+        with open(f'{folder}/{html_file}', 'r', encoding='utf-8') as file:
+            print(file)
             html_content = file.read()
         
         # Convert to plain text

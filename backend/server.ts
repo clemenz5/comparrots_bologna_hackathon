@@ -1,9 +1,11 @@
 import express, { Request, Response } from 'express';
+var cors = require('cors')
+
 import path from 'path';
 
 const app = express();
 const PORT = 3000;
-
+app.use(cors())
 // Test endpoint
 app.get('/test', (req: Request, res: Response) => {
     res.send('This is a test endpoint!');
