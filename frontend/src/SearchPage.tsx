@@ -28,6 +28,8 @@ function Searchbar(props: {
         <Input
           onChange={(e) => setDebouncedQuery(e.target.value)}
           placeholder="Search for documents"
+          size={"lg"}
+          width={"100%"}
         />
       </InputGroup>
     </div>
@@ -40,6 +42,7 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  console.log(documents);
   useEffect(() => {
     if (!props.query) {
       setDocuments([]);
@@ -62,8 +65,9 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         return response.json();
       })
       .then((data) => {
-        setDocuments(data.documents || []);
-        setAccuracies(data.accuracies || []);
+        console.log("sddf", data);
+        setDocuments(data.documents[0] || []);
+        setAccuracies(data.accuracy[0] || []);
       })
       .catch((err) => {
         setError(err.message);
@@ -87,8 +91,12 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         scrollbarWidth: "thin",
         justifyItems: "center",
       }}
-      templateColumns={"repeat(auto-fit, minmax(380px, 1fr))"}
+      templateColumns={{
+        base: "repeat(auto-fit, minmax(280px, 1fr))",
+        md: "repeat(auto-fit, minmax(380px, 1fr))",
+      }}
       gap={4}
+      width="100%"
     >
       {documents.length > 0 ? (
         documents.map((doc, index) => (
@@ -110,15 +118,14 @@ export default function SearchPage() {
   return (
     <VStack
       style={{
-        marginTop: "100px",
-        height: "100%",
-        width: "40%",
+        padding: "50px",
+        width: "100%",
+        margin: "auto",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
       <Searchbar query={query} setQuery={setQuery} />
-
       <SearchResults query={query} />
     </VStack>
   );
