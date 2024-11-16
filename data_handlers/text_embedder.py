@@ -1,7 +1,7 @@
 import ollama
 import chromadb
 from tqdm import tqdm
-from text_handlers import read_json, get_json_files
+from text_handlers import read_json, get_json_files, get_name
 
 chroma_client = chromadb.Client()
 #chroma_client = chromadb.HttpClient(host='localhost', port=8000)
@@ -52,4 +52,6 @@ def test_paragraph_distances(query) -> None:
 if __name__ == '__main__':
 	doc_list = get_json_files("/workspace/DFJ/hackathon_hudoc_article_6_data/dataset_hudoc_eng_json_article_6")
 	doc_tuples = [read_json(doc) for doc in doc_list]
+	doc_names = [get_name(doc[1][0]) for doc in doc_tuples]
+	print(doc_names)
 	add_docs_to_chromadb(doc_tuples[:100])

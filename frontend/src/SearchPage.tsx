@@ -3,6 +3,7 @@ import { InputGroup } from "./components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
 import { CSSProperties, useEffect, useState } from "react";
 import RelatedDocumentCard from "./components/RelatedDocumentCard";
+import PhotoAnalyzer from "./components/CameraButton";
 
 function Searchbar(props: {
   style?: CSSProperties;
@@ -22,7 +23,7 @@ function Searchbar(props: {
   }, [debouncedQuery]);
 
   return (
-    <div style={{ ...props.style }}>
+    <div style={{ ...props.style, display: "flex", alignItems: "center",  }}>
       <InputGroup style={{ width: "100%" }} startElement={<LuSearch />}>
         <Input
           onChange={(e) => setDebouncedQuery(e.target.value)}
@@ -30,7 +31,8 @@ function Searchbar(props: {
           size={"lg"}
           width={"100%"}
         />
-      </InputGroup>
+        
+      </InputGroup><PhotoAnalyzer onResult={(result) => props.setQuery(result) }/>
     </div>
   );
 }

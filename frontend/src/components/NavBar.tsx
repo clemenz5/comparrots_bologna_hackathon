@@ -1,5 +1,7 @@
 import { ReactElement } from "react";
 import { ColorModeButton } from "./ui/color-mode";
+import PhotoAnalyzer from "./CameraButton";
+import theme from "../theme";
 
 const Header = () => {
   return (
@@ -11,7 +13,8 @@ const Header = () => {
         display: "flex",
         justifyContent: "left",
         alignItems: "center",
-        backgroundColor: "#F2F2F2",
+        backgroundColor: "backgroundColor.700",
+        borderBottom: "1px solid #333",
       }}
     >
       <img
