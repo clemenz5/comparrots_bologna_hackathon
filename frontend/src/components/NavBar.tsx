@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { ColorModeButton } from "./ui/color-mode";
+import theme from "../theme";
 
 const Header = () => {
   
@@ -13,7 +14,8 @@ const Header = () => {
         display: "flex",
         justifyContent: "left",
         alignItems: "center",
-        backgroundColor: "#F2F2F2",
+        backgroundColor: "backgroundColor.700",
+        borderBottom: "1px solid #333",
       }}
     >
       <img
