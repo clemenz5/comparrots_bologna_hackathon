@@ -13,7 +13,7 @@ app.get('/test', (req: Request, res: Response) => {
 app.get('/query', (req: Request, res: Response) => {
     const queryParam = req.query.q as string;
     if (queryParam) {
-        res.send(`You searched for: ${queryParam}`);
+        res.send(JSON.stringify({accuracies: [0.2, 0.3, 0.4, 0.5, 0.6], documents: ["001-71946", "001-71946", "001-71946", "001-71946", "001-71946"]}));
     } else {
         res.status(400).send('Error: "q" parameter is required.');
     }
@@ -21,12 +21,17 @@ app.get('/query', (req: Request, res: Response) => {
 
 // Get File endpoint
 app.get('/getFile', (req: Request, res: Response) => {
-    const filePath = path.join(__dirname, 'example.txt');
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            res.status(500).send('Error: File not found.');
-        }
-    });
+    const fileId = req.query.id as string;
+    if (fileId) {
+        const filePath = path.join(__dirname, `${fileId}.json`);
+        res.sendFile(filePath, (err) => {
+            if (err) {
+                res.status(500).send('Error: File not found.');
+            }
+        })
+    } else {
+        res.status(400).send('Error: "id" parameter is required.');
+    }
 });
 
 // Start the server
