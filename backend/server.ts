@@ -97,10 +97,10 @@ app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
           .catch((error: Error) => {
             console.error(error);
           })
-          .then((res: any) => {
+          .then((result: any) => {
             collection
               .query({
-                queryEmbeddings: res.embeddings,
+                queryEmbeddings: result.embeddings,
                 nResults: 5,
               })
               .catch((error: Error) => {
