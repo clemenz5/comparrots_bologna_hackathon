@@ -1,44 +1,32 @@
-import { Button, Card, Stack } from "@chakra-ui/react";
-import { CSSProperties, useState, useEffect } from "react";
+import { Box, Card, Stack } from "@chakra-ui/react";
+
+import { useState, useEffect } from "react";
 import { Highlight } from "@chakra-ui/react";
-import { useDocumentSections } from "../QueryDocuments";
+import { useDocumentSections, useSection } from "../QueryDocuments";
 
 export const ComparableSection = ({
   sectionText,
   onSectionClick,
 }: {
   sectionText: string;
-  onSectionClick: (relatedSection: string) => void;
+  onSectionClick: () => void;
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const handleClick = () => onSectionClick(sectionText);
   return (
     <Stack
       px={4}
       py={2}
       borderRadius={4}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
+      onClick={() => onSectionClick()}
       cursor="pointer"
+      _hover={{
+        bg: "yellow.100",
+        borderRadius: "md",
+        transition: "background-color 0.2s ease",
+      }}
     >
-      {isHovered ? (
-        <Highlight
-          query={sectionText}
-          styles={{
-            px: 1,
-            py: 0.5,
-            borderRadius: "md",
-            bg: "green.100",
-            fontSize: "sm",
-            color: "green.800",
-          }}
-        >
-          {sectionText}
-        </Highlight>
-      ) : (
-        sectionText
-      )}
+      <Box as="span" bg="inherit">
+        {sectionText}
+      </Box>
     </Stack>
   );
 };
@@ -47,35 +35,37 @@ export default function MainDocumentCard(props: {
   documentId?: string;
   style?: React.CSSProperties;
   accuracy?: number;
-  onSectionClick: (relatedSection: string) => void;
+  onSectionClick: (section: string) => void;
 }) {
-  const [sections, setIsLoading] = useState<string[]>([]);
-  const { sections: documentSections, isLoading } = useDocumentSections(
-    props.documentId
-  );
-
-  useEffect(() => {
-    setIsLoading(documentSections);
-  }, [documentSections]);
+  const { sections, isLoading } = useDocumentSections(props.documentId);
+  console.log(sections);
 
   return (
     <Card.Root
-      width={"390px"}
+      maxWidth="100%"
+      minWidth="300px"
+      width={["100%", "100%", "500px"]}
       zIndex={10}
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
-      <Card.Header>
+      <Card.Header
+        style={{
+          backgroundColor: "#C1FCD5",
+          color: "green.800",
+          paddingBottom: "20px",
+        }}
+      >
         <Card.Title>Selected document: {props.documentId}</Card.Title>
       </Card.Header>
       <Card.Body>
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          documentSections.map((section, index) => (
+          sections.map((section, index) => (
             <ComparableSection
               key={index}
               sectionText={section}
-              onSectionClick={props.onSectionClick}
+              onSectionClick={() => props.onSectionClick(props.documentId!)}
             />
           ))
         )}

@@ -1,10 +1,9 @@
 import { Grid, HStack, Stack } from "@chakra-ui/react";
 import RelatedDocumentCard from "./components/RelatedDocumentCard";
 import MainDocumentCard from "./components/MainDocumentCard.tsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Key, useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
-import { useNavigate } from "react-router-dom";
 import { RiArrowLeftLine } from "react-icons/ri";
 
 export const ComparePage = () => {
@@ -13,7 +12,7 @@ export const ComparePage = () => {
   const documentId = urlParams.get("documentId");
   const navigate = useNavigate();
   const [relatedDocumentsToShow, setRelatedDocumentsToShow] = useState<
-    string[] | undefined
+    { documents: string[]; accuracy: number[] } | undefined
   >();
   const [sectionClicked, setSectionClicked] = useState<string | undefined>(
     undefined
@@ -26,66 +25,61 @@ export const ComparePage = () => {
           `https://lh9lxctqeb3213-644110db-8080.proxy.runpod.net/api/getSimilarParagraphs?paragraph=${sectionClicked}`
         );
         const data = await response.json();
-        setRelatedDocumentsToShow(data.relatedDocuments);
+        setRelatedDocumentsToShow(data);
       })();
     }
   }, [sectionClicked]);
 
   return (
     <Stack>
-      <Button
-        variant="outline"
-        colorPalette="green"
-        style={{
-          width: "200px",
-          marginRight: "20px",
-          marginLeft: "10px",
+      <HStack justifyContent="space-between" px="40px" py="20px">
+        <Button
+          variant="outline"
+          colorPalette="green"
+          onClick={() => {
+            navigate("/search");
+          }}
+        >
+          <RiArrowLeftLine />
+          Go back to search
+        </Button>
+      </HStack>
+      <Stack
+        direction={{
+          base: "column", // vertical stack on small screens
+          md: "row", // horizontal stack on medium screens
         }}
-        onClick={() => {
-          navigate("/search");
-        }}
-      >
-        <RiArrowLeftLine />
-        Go back to search
-      </Button>
-      <HStack
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          padding: "30px",
-          alignContent: "center",
-          justifyContent: "center",
-        }}
+        alignItems="flex-start"
+        justifyContent={"center"}
+        gap={6}
+        px="30px"
       >
         <MainDocumentCard
           documentId={documentId ?? ""}
           onSectionClick={(section) => setSectionClicked(section)}
-        ></MainDocumentCard>
+        />
         {relatedDocumentsToShow && (
-          <Grid gap="30px">
-            {relatedDocumentsToShow.map(
-              (
-                relatedDocument: string | undefined,
-                index: Key | null | undefined
-              ) => (
+          <Grid gap={4}>
+            {relatedDocumentsToShow.documents[0].map(
+              (relatedDocument: string | undefined, index: number) => (
                 <RelatedDocumentCard
-                  key={index}
+                  key={index! as Key}
                   documentId={relatedDocument}
+                  accuracy={relatedDocumentsToShow.accuracy[0][index]}
                   style={{
-                    padding: `0 ${
+                    padding:
                       relatedDocumentsToShow.length > 1
                         ? index === 0
                           ? "30px"
                           : "15px"
-                        : "0"
-                    }`,
+                        : "0",
                   }}
                 ></RelatedDocumentCard>
               )
             )}
           </Grid>
         )}
-      </HStack>
+      </Stack>
     </Stack>
   );
 };

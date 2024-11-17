@@ -4,35 +4,34 @@ import Camera, { FACING_MODES } from "react-html5-camera-photo";
 
 import "react-html5-camera-photo/build/css/index.css";
 import {
-  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogRoot,
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "@chakra-ui/react";
-const PhotoAnalyzer = (props: {onResult: (result: string) => void}) => {
-  function handleTakePhoto(dataUri, onResult: (res:string)=>void) {
-    Tesseract.recognize(dataUri, "eng", { logger: m => console.log(m) })
+import { LuScanLine } from "react-icons/lu";
+const PhotoAnalyzer = (props: { onResult: (result: string) => void }) => {
+  function handleTakePhoto(dataUri, onResult: (res: string) => void) {
+    Tesseract.recognize(dataUri, "eng", { logger: (m) => console.log(m) })
       .then(({ data: { text } }) => {
-        onResult(text)
+        onResult(text);
       })
       .catch((err) => {
         console.error(err);
       });
   }
-  const [open, setOpen] = useState(false)
-
+  const [open, setOpen] = useState(false);
 
   return (
-    <DialogRoot  lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
+    <DialogRoot lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          Take Photo
+          <LuScanLine />
+          Scan document
         </Button>
       </DialogTrigger>
       <DialogContent>

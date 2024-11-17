@@ -1,7 +1,6 @@
 import { ReactElement } from "react";
 import { ColorModeButton } from "./ui/color-mode";
-import PhotoAnalyzer from "./CameraButton";
-import theme from "../theme";
+import { Text } from "@chakra-ui/react";
 
 const Header = () => {
   return (
@@ -11,24 +10,47 @@ const Header = () => {
         padding: "20px",
         flexDirection: "row",
         display: "flex",
-        justifyContent: "left",
+        justifyContent: "space-between",
         alignItems: "center",
         backgroundColor: "backgroundColor.700",
         borderBottom: "1px solid #333",
       }}
     >
-      <img
+      <div
         style={{
-          height: "50px",
-          width: "50px",
-          marginLeft: "20px",
-          borderRadius: "10px",
+          display: "flex",
+          alignItems: "center",
         }}
-        src={"/comparrotor_logo.png"}
-        className="App-logo"
-        alt="logo"
-      />
-      <ColorModeButton style={{ marginLeft: "20px" }} />
+      >
+        <img
+          style={{
+            height: "50px",
+            width: "50px",
+            marginLeft: "20px",
+            borderRadius: "10px",
+          }}
+          src={"/comparrotor_logo.png"}
+          className="App-logo"
+          alt="logo"
+        />
+        <ColorModeButton style={{ marginLeft: "20px" }} />
+      </div>
+      {/* <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginLeft: "auto",
+        }}
+      >
+        <Text
+          fontSize={"30px"}
+          style={{ fontSize: "30px" }}
+          textAlign={"center"}
+        >
+          Comparrit
+        </Text>
+      </div> */}
     </div>
   );
 };

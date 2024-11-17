@@ -1,9 +1,10 @@
-import { Grid, IconButton, Input, Spinner, VStack } from "@chakra-ui/react";
+import { Box, Grid, Input, Spinner, VStack } from "@chakra-ui/react";
 import { InputGroup } from "./components/ui/input-group";
 import { LuSearch } from "react-icons/lu";
 import { CSSProperties, useEffect, useState } from "react";
 import RelatedDocumentCard from "./components/RelatedDocumentCard";
 import PhotoAnalyzer from "./components/CameraButton";
+import { Text } from "@chakra-ui/react";
 
 function Searchbar(props: {
   style?: CSSProperties;
@@ -23,17 +24,42 @@ function Searchbar(props: {
   }, [debouncedQuery]);
 
   return (
-    <div style={{ ...props.style, display: "flex", alignItems: "center",  }}>
-      <InputGroup style={{ width: "100%" }} startElement={<LuSearch />}>
+    <Box
+      style={{
+        ...props.style,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+      }}
+    >
+      <Text
+        fontSize={"2xl"}
+        textAlign="center"
+        padding={"24px"}
+        fontWeight={"bold"}
+      >
+        Welcome to the Comparrit document analyzer!
+      </Text>
+      Search for or scan your document below to find related cases and compare
+      them
+      <InputGroup
+        style={{
+          padding: "20px",
+          width: "90%",
+          maxWidth: "500px",
+        }}
+        startElement={<LuSearch />}
+      >
         <Input
           onChange={(e) => setDebouncedQuery(e.target.value)}
-          placeholder="Search for documents"
-          size={"lg"}
-          width={"100%"}
+          placeholder="Search for a document name or an ID"
+          size={"xl"}
         />
-        
-      </InputGroup><PhotoAnalyzer onResult={(result) => props.setQuery(result) }/>
-    </div>
+      </InputGroup>
+      <PhotoAnalyzer onResult={(result) => props.setQuery(result)} />
+    </Box>
   );
 }
 
@@ -92,7 +118,7 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
         scrollbarWidth: "thin",
         justifyItems: "center",
         justifyContent: "center",
-        gap: 4,
+        gap: 12,
       }}
       templateColumns={{
         base: "repeat(auto-fit, minmax(280px, 1fr))",
@@ -118,17 +144,18 @@ function SearchResults(props: { style?: CSSProperties; query: string }) {
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   return (
-    <VStack
+    <Box
       style={{
         padding: "20px",
         width: "100%",
-        margin: "20px",
+        display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
       }}
     >
       <Searchbar query={query} setQuery={setQuery} />
       <SearchResults query={query} />
-    </VStack>
+    </Box>
   );
 }
