@@ -1,6 +1,6 @@
 import Tesseract from "tesseract.js";
 import React, { useState } from "react";
-import Camera from "react-html5-camera-photo";
+import Camera, { FACING_MODES } from "react-html5-camera-photo";
 
 import "react-html5-camera-photo/build/css/index.css";
 import {
@@ -40,7 +40,7 @@ const PhotoAnalyzer = (props: {onResult: (result: string) => void}) => {
           <DialogTitle>Scan Document</DialogTitle>
         </DialogHeader>
         <DialogBody>
-          <Camera onTakePhoto={(uri)=> {
+          <Camera isImageMirror={false} idealFacingMode={FACING_MODES.ENVIRONMENT} onTakePhoto={(uri)=> {
             handleTakePhoto(uri, (result)=> {
                 props.onResult(result)
                  setOpen(false)
