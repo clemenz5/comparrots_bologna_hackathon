@@ -44,7 +44,16 @@ export const ComparePage = () => {
           Go back to search
         </Button>
       </HStack>
-      <HStack alignItems="flex-start" justifyContent={"center"} px="30px">
+      <Stack
+        direction={{
+          base: "column", // vertical stack on small screens
+          md: "row", // horizontal stack on medium screens
+        }}
+        alignItems="flex-start"
+        justifyContent={"center"}
+        gap={6}
+        px="30px"
+      >
         <MainDocumentCard
           documentId={documentId ?? ""}
           onSectionClick={(section) => setSectionClicked(section)}
@@ -70,7 +79,7 @@ export const ComparePage = () => {
             )}
           </Grid>
         )}
-      </HStack>
+      </Stack>
     </Stack>
   );
 };

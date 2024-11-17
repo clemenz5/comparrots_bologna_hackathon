@@ -29,6 +29,7 @@ export default function RelatedDocumentCard(props: {
   return (
     <Card.Root
       maxWidth="100%"
+      minWidth="300px"
       width={["100%", "100%", "390px"]}
       zIndex={10}
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}

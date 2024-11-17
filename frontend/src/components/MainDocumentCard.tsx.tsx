@@ -1,6 +1,4 @@
 import { Box, Card, Stack } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { Highlight } from "@chakra-ui/react";
 import { useSection } from "../QueryDocuments";
 
 export const ComparableSection = ({
@@ -40,7 +38,10 @@ export default function MainDocumentCard(props: {
 
   return (
     <Card.Root
-      width={"390px"}
+      maxWidth="100%"
+
+    minWidth="300px"
+      width={["100%", "100%", "390px"]}
       zIndex={10}
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
