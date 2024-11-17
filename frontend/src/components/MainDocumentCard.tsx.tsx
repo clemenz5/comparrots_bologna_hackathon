@@ -1,4 +1,4 @@
-import { Card, Stack } from "@chakra-ui/react";
+import { Box, Card, Stack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Highlight } from "@chakra-ui/react";
 import { useSection } from "../QueryDocuments";
@@ -10,7 +10,6 @@ export const ComparableSection = ({
   sectionText: string;
   onSectionClick: () => void;
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
   return (
     <Stack
       px={4}
@@ -18,21 +17,15 @@ export const ComparableSection = ({
       borderRadius={4}
       onClick={() => onSectionClick()}
       cursor="pointer"
+      _hover={{
+        bg: "yellow.100",
+        borderRadius: "md",
+        transition: "background-color 0.2s ease",
+      }}
     >
-      {isHovered ? (
-        <Highlight
-          query={sectionText}
-          styles={{
-            borderRadius: "md",
-            bg: "green.100",
-            color: "green.800",
-          }}
-        >
-          {sectionText}
-        </Highlight>
-      ) : (
-        sectionText
-      )}
+      <Box as="span" bg="inherit">
+        {sectionText}
+      </Box>
     </Stack>
   );
 };
