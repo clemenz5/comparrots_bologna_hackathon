@@ -6,7 +6,7 @@ import { Key, useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { RiArrowLeftLine } from "react-icons/ri";
-import { Text } from "@chakra-ui/react";
+import "./ComparePage.css";
 
 export const ComparePage = () => {
   const location = useLocation();
@@ -59,9 +59,9 @@ export const ComparePage = () => {
         </Button>
       </HStack>
       <HStack
+      className="responsive-hstack"
         style={{
           display: "flex",
-          flexDirection: "row",
           padding: "30px",
           alignContent: "center",
           justifyContent: "center",
