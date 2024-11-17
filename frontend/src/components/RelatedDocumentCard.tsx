@@ -24,7 +24,7 @@ export default function RelatedDocumentCard(props: {
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
       <Card.Header>
-        <Card.Title>Selected Document: {props.documentId}</Card.Title>
+        <Card.Title>{props.documentId}</Card.Title>
         <Card.Description></Card.Description>
       </Card.Header>
       <Card.Body>{isLoading ? <div>Loading...</div> : sections[0]}</Card.Body>

@@ -1,5 +1,5 @@
-import { Button, Card, Stack } from "@chakra-ui/react";
-import { CSSProperties, useState, useEffect } from "react";
+import { Card, Stack } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { Highlight } from "@chakra-ui/react";
 import { useDocumentSections } from "../QueryDocuments";
 
@@ -30,7 +30,6 @@ export const ComparableSection = ({
             py: 0.5,
             borderRadius: "md",
             bg: "green.100",
-            fontSize: "sm",
             color: "green.800",
           }}
         >
@@ -64,7 +63,13 @@ export default function MainDocumentCard(props: {
       zIndex={10}
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
-      <Card.Header>
+      <Card.Header
+        style={{
+          backgroundColor: "#C1FCD5",
+          color: "green.800",
+          paddingBottom: "20px",
+        }}
+      >
         <Card.Title>Selected document: {props.documentId}</Card.Title>
       </Card.Header>
       <Card.Body>
