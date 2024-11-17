@@ -82,6 +82,31 @@ app.get("/getFile", (req: Request, res: Response) => {
   }
 });
 
+// Get paragraph by ID endpoint
+app.get("/getParagraphById", (req: Request, res: Response) => {
+  const paragraphId = req.query.id as string;
+  if (paragraphId) {
+    const chroma = new ChromaClient({ path: "http://localhost:8000" });
+    chroma
+      .getOrCreateCollection({
+        name: "comparrit_collection",
+        embeddingFunction: embedder,
+      })
+      .then((collection: any) => {
+        collection
+          .get({ ids: [paragraphId], include: ["documents"] })
+          .catch((error: Error) => {
+            console.error(error);
+          })
+          .then((result: any) => {
+            res.send(JSON.stringify(result.documents));
+           });
+      });
+  } else {
+    res.status(400).send('Error: "id" parameter is required.');
+  }
+});
+
 app.get("/getSimilarParagraphs", async (req: Request, res: Response) => {
   const paragraph = req.query.paragraph as string;
   if (paragraph) {
