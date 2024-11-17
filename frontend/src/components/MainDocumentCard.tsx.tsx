@@ -1,7 +1,7 @@
 import { Card, Stack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { Highlight } from "@chakra-ui/react";
-import { useDocumentSections, useSection } from "../QueryDocuments";
+import { useSection } from "../QueryDocuments";
 
 export const ComparableSection = ({
   sectionText,
@@ -26,8 +26,6 @@ export const ComparableSection = ({
         <Highlight
           query={sectionText}
           styles={{
-            px: 1,
-            py: 0.5,
             borderRadius: "md",
             bg: "green.100",
             color: "green.800",
