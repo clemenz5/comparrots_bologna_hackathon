@@ -71,12 +71,23 @@ app.get("/query", (req: Request, res: Response) => {
 app.get("/getFile", (req: Request, res: Response) => {
   const fileId = req.query.id as string;
   if (fileId) {
-    const filePath = path.join(__dirname, `${fileId}.json`);
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        res.status(500).send("Error: File not found.");
-      }
-    });
+    const chroma = new ChromaClient({ path: "http://localhost:8000" });
+    chroma
+      .getOrCreateCollection({
+        name: "comparrit_collection",
+        embeddingFunction: embedder,
+      })
+      .then((collection: any) => {
+        collection
+          .get({ ids: Array.from({ length: 100 }, (_, i) => fileId +":" + i.toString()), include: ["documents"] })
+          .catch((error: Error) => {
+            console.error(error);
+          })
+          .then((result: any) => {
+            console.log(result);
+            res.send(JSON.stringify(result.documents));
+           });
+      });
   } else {
     res.status(400).send('Error: "id" parameter is required.');
   }
