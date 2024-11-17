@@ -70,6 +70,7 @@ app.get("/query", (req: Request, res: Response) => {
 // Get File endpoint
 app.get("/getFile", (req: Request, res: Response) => {
   const fileId = req.query.id as string;
+  console.log(fileId);
   if (fileId) {
     const chroma = new ChromaClient({ path: "http://localhost:8000" });
     chroma
