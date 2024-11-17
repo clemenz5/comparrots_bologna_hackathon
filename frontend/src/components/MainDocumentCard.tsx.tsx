@@ -1,5 +1,8 @@
 import { Box, Card, Stack } from "@chakra-ui/react";
-import { useSection } from "../QueryDocuments";
+
+import { useState, useEffect } from "react";
+import { Highlight } from "@chakra-ui/react";
+import { useDocumentSections, useSection } from "../QueryDocuments";
 
 export const ComparableSection = ({
   sectionText,
@@ -34,13 +37,13 @@ export default function MainDocumentCard(props: {
   accuracy?: number;
   onSectionClick: (section: string) => void;
 }) {
-  const { sections, isLoading } = useSection(props.documentId);
+  const { sections, isLoading } = useDocumentSections(props.documentId);
+  console.log(sections);
 
   return (
     <Card.Root
       maxWidth="100%"
-
-    minWidth="300px"
+      minWidth="300px"
       width={["100%", "100%", "390px"]}
       zIndex={10}
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
