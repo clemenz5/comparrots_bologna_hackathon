@@ -1,0 +1,13 @@
+.responsive-hstack {
+    display: flex;
+    flex-direction: row; /* Default to row */
+    padding: 30px;
+    align-content: center;
+    justify-content: center;
+  }
+  
+  @media (max-width: 768px) {
+    .responsive-hstack {
+      flex-direction: column; /* Switch to column on mobile */
+    }
+  }
