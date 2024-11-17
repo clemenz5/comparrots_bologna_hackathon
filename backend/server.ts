@@ -99,7 +99,7 @@ app.get("/getParagraphById", (req: Request, res: Response) => {
             console.error(error);
           })
           .then((result: any) => {
-            console.log(result);
+            res.send(JSON.stringify(result.documents));
            });
       });
   } else {
