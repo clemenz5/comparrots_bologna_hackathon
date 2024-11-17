@@ -44,20 +44,28 @@ export const ComparePage = () => {
           Go back to search
         </Button>
       </HStack>
-      <HStack alignItems="flex-start" px="30px">
+      <HStack alignItems="flex-start" justifyContent={"center"} px="30px">
         <MainDocumentCard
           documentId={documentId ?? ""}
           onSectionClick={(section) => setSectionClicked(section)}
         />
         {relatedDocumentsToShow && (
           <Grid gap={4}>
-            {relatedDocumentsToShow.documents.map(
-              (relatedDocument: string, index: number) => (
+            {relatedDocumentsToShow.documents[0].map(
+              (relatedDocument: string | undefined, index: number) => (
                 <RelatedDocumentCard
-                  key={index as Key}
+                  key={index! as Key}
                   documentId={relatedDocument}
-                  accuracy={relatedDocumentsToShow.accuracy[index]}
-                />
+                  accuracy={relatedDocumentsToShow.accuracy[0][index]}
+                  style={{
+                    padding:
+                      relatedDocumentsToShow.length > 1
+                        ? index === 0
+                          ? "30px"
+                          : "15px"
+                        : "0",
+                  }}
+                ></RelatedDocumentCard>
               )
             )}
           </Grid>
