@@ -44,7 +44,7 @@ export default function MainDocumentCard(props: {
     <Card.Root
       maxWidth="100%"
       minWidth="300px"
-      width={["100%", "100%", "390px"]}
+      width={["100%", "100%", "500px"]}
       zIndex={10}
       style={{ boxShadow: "0px 4px 20px -4px #00000080" }}
     >
