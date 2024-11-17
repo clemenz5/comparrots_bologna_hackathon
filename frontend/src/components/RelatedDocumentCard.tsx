@@ -36,7 +36,7 @@ export default function RelatedDocumentCard(props: {
       <DialogRoot lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Section Content</DialogTitle>
+            <DialogTitle>Document: {props.documentId}</DialogTitle>
           </DialogHeader>
           <DialogBody>
             {sections ? sections[0] : "No sections found."}

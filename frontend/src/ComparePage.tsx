@@ -14,7 +14,7 @@ export const ComparePage = () => {
   const documentId = urlParams.get("documentId");
   const navigate = useNavigate();
   const [relatedDocumentsToShow, setRelatedDocumentsToShow] = useState<
-    string[] | undefined
+    {documents: string[], accuracy: number} | undefined
   >();
   const [sectionClicked, setSectionClicked] = useState<string | undefined>(
     undefined
@@ -22,12 +22,13 @@ export const ComparePage = () => {
 
   useEffect(() => {
     if (sectionClicked) {
+      console.log(sectionClicked);
       (async () => {
         const response = await fetch(
           `https://lh9lxctqeb3213-644110db-8080.proxy.runpod.net/api/getSimilarParagraphs?paragraph=${sectionClicked}`
         );
         const data = await response.json();
-        setRelatedDocumentsToShow(data.relatedDocuments);
+        setRelatedDocumentsToShow(data);
       })();
     }
   }, [sectionClicked]);
@@ -72,14 +73,15 @@ export const ComparePage = () => {
         ></MainDocumentCard>
         {relatedDocumentsToShow && (
           <Grid gap="30px">
-            {relatedDocumentsToShow.map(
+            {relatedDocumentsToShow.documents[0].map(
               (
                 relatedDocument: string | undefined,
-                index: Key | null | undefined
+                index: number
               ) => (
                 <RelatedDocumentCard
-                  key={index}
+                  key={index! as Key}
                   documentId={relatedDocument}
+                  accuracy={relatedDocumentsToShow.accuracy[0][index]}
                   style={{
                     padding: `0 ${
                       relatedDocumentsToShow.length > 1

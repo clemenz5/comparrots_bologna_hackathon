@@ -8,18 +8,15 @@ export const ComparableSection = ({
   onSectionClick,
 }: {
   sectionText: string;
-  onSectionClick: (relatedSection: string) => void;
+  onSectionClick: () => void;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const handleClick = () => onSectionClick(sectionText);
   return (
     <Stack
       px={4}
       py={2}
       borderRadius={4}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
+      onClick={() => onSectionClick()}
       cursor="pointer"
     >
       {isHovered ? (
@@ -44,7 +41,7 @@ export default function MainDocumentCard(props: {
   documentId?: string;
   style?: React.CSSProperties;
   accuracy?: number;
-  onSectionClick: (relatedSection: string) => void;
+  onSectionClick: (section: string) => void;
 }) {
   const { sections, isLoading } = useSection(props.documentId);
 
@@ -71,7 +68,7 @@ export default function MainDocumentCard(props: {
             <ComparableSection
               key={index}
               sectionText={section}
-              onSectionClick={props.onSectionClick}
+              onSectionClick={() => props.onSectionClick(props.documentId!)}
             />
           ))
         )}
