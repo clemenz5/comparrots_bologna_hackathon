@@ -3,7 +3,7 @@ import chromadb
 from tqdm import tqdm
 from text_handlers import read_json, get_json_files, get_name
 
-chroma_client = chromadb.Client()
+#chroma_client = chromadb.Client()
 chroma_client = chromadb.HttpClient(host='localhost', port=8000)
 collection = chroma_client.get_or_create_collection(name="comparrit_collection",
                                                     metadata={"hnsw:space": "cosine"})
@@ -33,6 +33,32 @@ def get_closest_embeddings(query, no_results=10):
         n_results=no_results
         )
     return results
+
+def get_closest_documents(query, no_results=100):
+	doc_list = get_json_files("data")
+	doc_tuples = [read_json(doc) for doc in doc_list]
+	add_docs_to_chromadb(doc_tuples[:100])
+	response = ollama.embeddings(model="mxbai-embed-large:v1", prompt=query)
+
+	unique_docs = []
+	batch_size = no_results
+
+	while len(unique_docs) < no_results:
+		batch_size *= 2
+		results = collection.query(
+								query_embeddings=[response["embedding"]],
+								n_results=batch_size
+								)
+		for id in results['ids'][0]:
+			doc_id = id.split(':')[1]
+			if doc_id not in unique_docs:
+				unique_docs.append(doc_id)
+				print(unique_docs)
+            
+			if len(unique_docs) == no_results:
+				break
+
+	return unique_docs[:no_results]
 
 def get_most_similar_section(query_section):
     print("==== INPUT SECTION ====")
