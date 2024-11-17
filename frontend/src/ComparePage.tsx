@@ -6,6 +6,7 @@ import { Key, useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { RiArrowLeftLine } from "react-icons/ri";
+import { Text } from "@chakra-ui/react";
 
 export const ComparePage = () => {
   const location = useLocation();
@@ -33,21 +34,29 @@ export const ComparePage = () => {
 
   return (
     <Stack>
-      <Button
-        variant="outline"
-        colorPalette="green"
+      <HStack
         style={{
-          width: "200px",
-          marginRight: "20px",
-          marginLeft: "10px",
-        }}
-        onClick={() => {
-          navigate("/search");
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+          marginTop: "20px",
+          marginLeft: "40px",
+          marginRight: "40px",
         }}
       >
-        <RiArrowLeftLine />
-        Go back to search
-      </Button>
+        <Button
+          variant="outline"
+          colorPalette="green"
+          onClick={() => {
+            navigate("/search");
+          }}
+        >
+          <RiArrowLeftLine />
+          Go back to search
+        </Button>
+      </HStack>
       <HStack
         style={{
           display: "flex",

@@ -9,8 +9,9 @@ export const useDocumentSections = (documentId?: string) => {
     const fetchDocumentSections = async () => {
       setIsLoading(true);
       try {
+        const id = documentId.split(":")[2];
         const response = await fetch(
-          `https://lh9lxctqeb3213-644110db-8080.proxy.runpod.net/api/getFile?id=${documentId}`
+          `https://lh9lxctqeb3213-644110db-8080.proxy.runpod.net/api/getFile?id=${id}`
         );
         const data = await response.json();
         setSections(data.sections || ["No sections found."]);
